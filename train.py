@@ -313,7 +313,7 @@ def train(opt):
     writer.close()
 
 
-def save_checkpoint(model, name):
+def save_checkpoint(model: object, name: object) -> object:
     if isinstance(model, CustomDataParallel):
         torch.save(model.module.model.state_dict(), os.path.join(opt.saved_path, name))
     else:
