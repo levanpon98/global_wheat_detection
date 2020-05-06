@@ -45,8 +45,8 @@ class WheatDataset(Dataset):
         target['image_id'] = torch.tensor([index])
         target['area'] = area
         target['iscrowd'] = iscrowd
-        annotation = np.zeros((1, 5))
-        annotation[0, :4] = target['boxes']
+        annotation = np.zeros((target['boxes'].shape[0], 5))
+        annotation[:, :4] = target['boxes']
         sample = {
             'image': image,
             'bboxes': annotation
