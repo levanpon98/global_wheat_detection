@@ -45,9 +45,11 @@ class WheatDataset(Dataset):
         target['image_id'] = torch.tensor([index])
         target['area'] = area
         target['iscrowd'] = iscrowd
+        annotation = np.zeros((1, 5))
+        annotation[0, :4] = target['boxes']
         sample = {
             'image': image,
-            'bboxes': target['boxes']
+            'bboxes': annotation
         }
         if self.transforms:
             sample = self.transforms(sample)
@@ -100,7 +102,7 @@ def collater(data):
 
     if max_num_annots > 0:
 
-        annot_padded = torch.ones((len(annots), max_num_annots, 4)) * -1
+        annot_padded = torch.ones((len(annots), max_num_annots, 5)) * 0
 
         for idx, annot in enumerate(annots):
             if annot.shape[0] > 0:
