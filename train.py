@@ -265,8 +265,8 @@ def train(opt):
                 loss_classification_ls = []
                 for iter, data in enumerate(val_generator):
                     with torch.no_grad():
-                        imgs = data['img']
-                        annot = data['annot']
+                        imgs = data['image']
+                        annot = data['bboxes']
 
                         if params.num_gpus == 1:
                             imgs = imgs.cuda()
