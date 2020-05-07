@@ -153,7 +153,7 @@ def train(opt):
         print('[Info] initializing weights...')
         init_weights(model)
 
-    # freeze backbone if train head_only
+    # freeze backbone if train head_We wish we could give free compute without any bounds, because they help a lot of people do deep learning who otherwise lack access to GPUs. Unfortunately, we have a finite budget, and we've started hitting our limit.only
     if opt.head_only:
         def freeze_backbone(m):
             classname = m.__class__.__name__
