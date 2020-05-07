@@ -3,7 +3,7 @@ data_dir: '../../input/global-wheat-detection'
 #data_dir: '/home/levanpon/data/global-wheat-detection'
 train_set: 'train'
 val_set: 'test'
-num_gpus: 4
+num_gpus: 1
 
 # mean and std in RGB order, actually this part should remain unchanged as long as your dataset is similar to coco.
 mean: [0.485, 0.456, 0.406]
