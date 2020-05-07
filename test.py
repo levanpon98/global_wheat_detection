@@ -3,6 +3,8 @@ from torch.backends import cudnn
 from backbone import EfficientDetBackbone
 import pandas as pd
 import os
+import numpy as np
+import cv2
 from efficientdet.utils import BBoxTransform, ClipBoxes
 from utils.utils import preprocess, invert_affine, postprocess, STANDARD_COLORS, standard_to_bgr, get_index_label, \
     plot_one_box
@@ -40,6 +42,23 @@ if use_float16:
 
 submit_df = pd.read_csv('../input/global-wheat-detection/sample_submission.csv')
 
+
+def display(preds, imgs, imwrite=True):
+    for i in range(len(imgs)):
+        if len(preds[i]['rois']) == 0:
+            continue
+
+        for j in range(len(preds[i]['rois'])):
+            x1, y1, x2, y2 = preds[i]['rois'][j].astype(np.int)
+            obj = obj_list[preds[i]['class_ids'][j]]
+            score = float(preds[i]['scores'][j])
+            plot_one_box(imgs[i], [x1, y1, x2, y2], label=obj, score=score,
+                         color=color_list[get_index_label(obj, obj_list)])
+
+        if imwrite:
+            cv2.imwrite(f'test/img_inferred_d{compound_coef}_this_repo_{i}.jpg', imgs[i])
+
+
 for root, _, files in os.walk('../input/global-wheat-detection/test'):
     for file in files:
         img_path = os.path.join(root, file)
@@ -65,4 +84,6 @@ for root, _, files in os.walk('../input/global-wheat-detection/test'):
                               threshold, iou_threshold)
 
             out = invert_affine(framed_metas, out)
-            print(out)
+
+            display(out, ori_imgs, imwrite=True)
+
