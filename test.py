@@ -15,8 +15,8 @@ force_input_size = None
 anchor_ratios = [(1.0, 1.0), (1.4, 0.7), (0.7, 1.4)]
 anchor_scales = [2 ** 0, 2 ** (1.0 / 3.0), 2 ** (2.0 / 3.0)]
 
-threshold = 0.2
-iou_threshold = 0.2
+threshold = 0.5
+iou_threshold = 0.5
 
 use_cuda = True
 use_float16 = False
@@ -59,7 +59,6 @@ def display(preds, imgs, imwrite=True):
             cv2.imwrite(f'test/img_inferred_d{compound_coef}_this_repo_{i}.jpg', imgs[i])
 
 
-detection_threshold = 0.5
 results = []
 for root, _, files in os.walk('../../input/global-wheat-detection/test'):
     for file in files:
@@ -89,8 +88,8 @@ for root, _, files in os.walk('../../input/global-wheat-detection/test'):
             boxes = out[0]['rois']
             scores = out[0]['scores']
 
-            boxes = boxes[scores >= detection_threshold].astype(np.int32)
-            scores = scores[scores >= detection_threshold]
+            boxes = boxes[scores >= threshold].astype(np.int32)
+            scores = scores[scores >= threshold]
             image_id = file
             boxes[:, 2] = boxes[:, 2] - boxes[:, 0]
             boxes[:, 3] = boxes[:, 3] - boxes[:, 1]
