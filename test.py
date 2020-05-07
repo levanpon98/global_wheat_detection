@@ -38,7 +38,7 @@ if use_cuda:
 if use_float16:
     model = model.half()
 
-submit_df = pd.read_csv('/home/levanpon/data/global-wheat-detection/sample_submission.csv')
+submit_df = pd.read_csv('../global-wheat-detection/sample_submission.csv')
 
 for root, _, files in os.walk('/home/levanpon/data/global-wheat-detection/test'):
     for file in files:
