@@ -40,7 +40,7 @@ if use_float16:
 
 submit_df = pd.read_csv('../input/global-wheat-detection/sample_submission.csv')
 
-for root, _, files in os.walk('/home/levanpon/data/global-wheat-detection/test'):
+for root, _, files in os.walk('../input/global-wheat-detection/test'):
     for file in files:
         img_path = os.path.join(root, file)
 
