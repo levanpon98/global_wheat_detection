@@ -1,5 +1,5 @@
 project_name: wheat  # also the folder name of the dataset that under data_path folder
-data_dir: '../input/global-wheat-detection'
+data_dir: '../../input/global-wheat-detection'
 #data_dir: '/home/levanpon/data/global-wheat-detection'
 train_set: 'train'
 val_set: 'test'
