@@ -7,7 +7,7 @@ import numpy as np
 import cv2
 from efficientdet.utils import BBoxTransform, ClipBoxes
 from utils.utils import preprocess, invert_affine, postprocess, STANDARD_COLORS, standard_to_bgr, get_index_label, \
-    plot_one_box
+    plot_one_box, format_prediction_string
 
 compound_coef = 1
 force_input_size = None
@@ -59,6 +59,8 @@ def display(preds, imgs, imwrite=True):
             cv2.imwrite(f'test/img_inferred_d{compound_coef}_this_repo_{i}.jpg', imgs[i])
 
 
+detection_threshold = 0.5
+results = []
 for root, _, files in os.walk('../input/global-wheat-detection/test'):
     for file in files:
         img_path = os.path.join(root, file)
@@ -84,6 +86,22 @@ for root, _, files in os.walk('../input/global-wheat-detection/test'):
                               threshold, iou_threshold)
 
             out = invert_affine(framed_metas, out)
+            boxes = out[0]['rois']
+            scores = out[0]['scores']
 
-            display(out, ori_imgs, imwrite=True)
+            boxes = boxes[scores >= detection_threshold].astype(np.int32)
+            scores = scores[scores >= detection_threshold]
+            image_id = file
+            boxes[:, 2] = boxes[:, 2] - boxes[:, 0]
+            boxes[:, 3] = boxes[:, 3] - boxes[:, 1]
 
+            result = {
+                'image_id': image_id,
+                'PredictionString': format_prediction_string(boxes, scores)
+            }
+
+            results.append(result)
+
+
+test_df = pd.DataFrame(results, columns=['image_id', 'PredictionString'])
+test_df.to_csv('submission.csv', index=False)
